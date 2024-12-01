@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.parking.mapper.AParkingBillingMapper">
+    
+    <resultMap type="AParkingBilling" id="AParkingBillingResult">
+        <result property="billingId"    column="billing_id"    />
+        <result property="perMinuteFee"    column="per_minute_fee"    />
+        <result property="extraFee"    column="extra_fee"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectAParkingBillingVo">
+        select billing_id, per_minute_fee, extra_fee, remark, status from a_parking_billing
+    </sql>
+
+    <select id="selectAParkingBillingList" parameterType="AParkingBilling" resultMap="AParkingBillingResult">
+        <include refid="selectAParkingBillingVo"/>
+        <where>  
+            <if test="billingId != null "> and billing_id = #{billingId}</if>
+            <if test="perMinuteFee != null "> and per_minute_fee = #{perMinuteFee}</if>
+            <if test="extraFee != null "> and extra_fee = #{extraFee}</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectAParkingBillingByBillingId" parameterType="Long" resultMap="AParkingBillingResult">
+        <include refid="selectAParkingBillingVo"/>
+        where billing_id = #{billingId}
+    </select>
+
+    <insert id="insertAParkingBilling" parameterType="AParkingBilling" useGeneratedKeys="true" keyProperty="billingId">
+        insert into a_parking_billing
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="perMinuteFee != null">per_minute_fee,</if>
+            <if test="extraFee != null">extra_fee,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="perMinuteFee != null">#{perMinuteFee},</if>
+            <if test="extraFee != null">#{extraFee},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAParkingBilling" parameterType="AParkingBilling">
+        update a_parking_billing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="perMinuteFee != null">per_minute_fee = #{perMinuteFee},</if>
+            <if test="extraFee != null">extra_fee = #{extraFee},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where billing_id = #{billingId}
+    </update>
+
+    <delete id="deleteAParkingBillingByBillingId" parameterType="Long">
+        delete from a_parking_billing where billing_id = #{billingId}
+    </delete>
+
+    <delete id="deleteAParkingBillingByBillingIds" parameterType="String">
+        delete from a_parking_billing where billing_id in 
+        <foreach item="billingId" collection="array" open="(" separator="," close=")">
+            #{billingId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.parking.mapper.AParkingOtherMapper">
+
+
+    <resultMap type="AParkingRecord" id="AParkingRecordResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="licensePlateNumber"    column="license_plate_number"    />
+        <result property="entryTime"    column="entry_time"    />
+        <result property="outTime"    column="out_time"    />
+        <result property="fee"    column="fee"    />
+        <result property="billingId"    column="billing_id"    />
+    </resultMap>
+
+    <select id="selectAParkingRecordByLicensePlateNumber" parameterType="String" resultMap="AParkingRecordResult">
+        select * from a_parking_record where license_plate_number = #{licensePlateNumber} and out_time is null
+    </select>
+
+    <update id="updateAParkingRecordOutTime" parameterType="AParkingRecord">
+        update a_parking_record set out_time = #{outTime} where license_plate_number = #{licensePlateNumber} and entry_time = #{entryTime}
+    </update>
+
+    <update id="updateAParkingRecordFee" parameterType="AParkingRecord">
+        update a_parking_record set fee = #{fee} where license_plate_number = #{licensePlateNumber} and entry_time = #{entryTime}
+    </update>
+
+    <update id="updateAParkingBillingStatusToZero" >
+        update a_parking_Billing set status = 0 where status = 1
+    </update>
+
+    <update id="updateAParkingBillingStatus" parameterType="aParkingBilling">
+        update a_parking_Billing set status = 1 where billing_id = #{billingId}
+    </update>
+
+    <select id="selectAParkingRecordByYear" parameterType="AParkingRecord" resultMap="AParkingRecordResult">
+        select * from a_parking_record where entry_time between #{entryTime} and #{outTime}
+    </select>
+</mapper>

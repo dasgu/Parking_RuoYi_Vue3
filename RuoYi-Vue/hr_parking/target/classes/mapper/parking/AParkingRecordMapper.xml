@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.parking.mapper.AParkingRecordMapper">
+    
+    <resultMap type="AParkingRecord" id="AParkingRecordResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="licensePlateNumber"    column="license_plate_number"    />
+        <result property="entryTime"    column="entry_time"    />
+        <result property="outTime"    column="out_time"    />
+        <result property="fee"    column="fee"    />
+        <result property="billingId"    column="billing_id"    />
+    </resultMap>
+
+    <sql id="selectAParkingRecordVo">
+        select record_id, license_plate_number, entry_time, out_time, fee, billing_id from a_parking_record
+    </sql>
+
+    <select id="selectAParkingRecordList" parameterType="AParkingRecord" resultMap="AParkingRecordResult">
+        <include refid="selectAParkingRecordVo"/>
+        <where>  
+            <if test="recordId != null "> and record_id = #{recordId}</if>
+            <if test="licensePlateNumber != null  and licensePlateNumber != ''"> and license_plate_number = #{licensePlateNumber}</if>
+            <if test="entryTime != null "> and entry_time = #{entryTime}</if>
+            <if test="outTime != null "> and out_time = #{outTime}</if>
+            <if test="fee != null "> and fee = #{fee}</if>
+            <if test="billingId != null "> and billing_id = #{billingId}</if>
+        </where>
+    </select>
+    
+    <select id="selectAParkingRecordByRecordId" parameterType="Long" resultMap="AParkingRecordResult">
+        <include refid="selectAParkingRecordVo"/>
+        where record_id = #{recordId}
+    </select>
+
+    <insert id="insertAParkingRecord" parameterType="AParkingRecord">
+        insert into a_parking_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">record_id,</if>
+            <if test="licensePlateNumber != null">license_plate_number,</if>
+            <if test="entryTime != null">entry_time,</if>
+            <if test="outTime != null">out_time,</if>
+            <if test="fee != null">fee,</if>
+            <if test="billingId != null">billing_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">#{recordId},</if>
+            <if test="licensePlateNumber != null">#{licensePlateNumber},</if>
+            <if test="entryTime != null">#{entryTime},</if>
+            <if test="outTime != null">#{outTime},</if>
+            <if test="fee != null">#{fee},</if>
+            <if test="billingId != null">#{billingId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAParkingRecord" parameterType="AParkingRecord">
+        update a_parking_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="licensePlateNumber != null">license_plate_number = #{licensePlateNumber},</if>
+            <if test="entryTime != null">entry_time = #{entryTime},</if>
+            <if test="outTime != null">out_time = #{outTime},</if>
+            <if test="fee != null">fee = #{fee},</if>
+            <if test="billingId != null">billing_id = #{billingId},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteAParkingRecordByRecordId" parameterType="Long">
+        delete from a_parking_record where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteAParkingRecordByRecordIds" parameterType="String">
+        delete from a_parking_record where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+</mapper>
