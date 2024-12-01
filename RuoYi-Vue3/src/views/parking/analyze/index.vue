@@ -63,17 +63,22 @@
             </el-col>
         </el-row>
         <el-divider />
-        <el-row>
-            <el-col :span="24">
-                <el-date-picker v-model="year" type="year" placeholder="请选择年份" value-format="YYYY"
-                    @change="dateChange" />
-            </el-col>
-        </el-row>
-        <el-divider border-style="dashed" />
-        <div id="a" style="width: 100%;height:400px;"></div>
-        <div id="b" style="width: 100%;height:400px;"></div>
-        <div id="c" style="width: 100%;height:400px;"></div>
-        <div id="d" style="width: 100%;height:400px;"></div>
+        <div id="pdfDom">
+            <el-row>
+                <el-col :span="24">
+                    <el-date-picker v-model="year" type="year" placeholder="请选择年份" value-format="YYYY"
+                        @change="dateChange" />
+                </el-col>
+            </el-row>
+            <el-divider border-style="dashed" />
+            <div id="a" style="width: 100%;height:400px;"></div>
+            <div id="b" style="width: 100%;height:400px;"></div>
+            <div id="c" style="width: 100%;height:400px;"></div>
+            <div id="d" style="width: 100%;height:400px;"></div>
+        </div>
+        <div style="margin-bottom: 100px; display: flex; justify-content: center;">
+            <el-button type="success" @click="pdfOn()">打印</el-button>
+        </div>
     </div>
 
 </template>
@@ -83,6 +88,7 @@ import * as echarts from 'echarts';
 import { dataAnalyze, dataAnalyzeYear } from '../../../api/parking/other';
 import { useTransition } from '@vueuse/core'
 import { ChatLineRound, TopRight, Money, ChatDotSquare, StarFilled, Van } from '@element-plus/icons-vue'
+import htmlToPdf from '../../../utils/htmlToPdf';
 
 const record_all = ref([])
 const record_pass = ref([])
@@ -98,6 +104,10 @@ let option_c = null
 let chart_d = null
 let option_d = null
 const year = ref('2024')
+
+const pdfOn = () => {
+    htmlToPdf.getPdf("停车场统计分析");
+}
 
 const dateChange = () => {
     dataAnalyzeYear(getDateYear(year.value)).then(response => {

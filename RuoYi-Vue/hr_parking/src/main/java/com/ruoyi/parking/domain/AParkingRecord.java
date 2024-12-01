@@ -27,12 +27,12 @@ public class AParkingRecord extends BaseEntity
 
     /** 进入时间 */
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-    @Excel(name = "进入时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "进入时间", width = 30, dateFormat = "yyyy/MM/dd HH:mm:ss")
     private Date entryTime;
 
     /** 离开时间 */
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-    @Excel(name = "离开时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "离开时间", width = 30, dateFormat = "yyyy/MM/dd HH:mm:ss")
     private Date outTime;
 
     /** 费用 */
