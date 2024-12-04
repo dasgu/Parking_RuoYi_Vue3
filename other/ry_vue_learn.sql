@@ -11,7 +11,7 @@
  Target Server Version : 80037
  File Encoding         : 65001
 
- Date: 01/12/2024 16:06:26
+ Date: 04/12/2024 22:56:02
 */
 
 SET NAMES utf8mb4;
@@ -33,9 +33,9 @@ CREATE TABLE `a_parking_billing`  (
 -- ----------------------------
 -- Records of a_parking_billing
 -- ----------------------------
-INSERT INTO `a_parking_billing` VALUES (1, 30, 0, '每分钟0.3元', 0);
+INSERT INTO `a_parking_billing` VALUES (1, 40, 0, '每分钟0.4元', 1);
 INSERT INTO `a_parking_billing` VALUES (2, 50, 0, '每分钟0.5元', 0);
-INSERT INTO `a_parking_billing` VALUES (3, 80, 1000, '入场费10元，后每分钟0.8元', 1);
+INSERT INTO `a_parking_billing` VALUES (3, 80, 1000, '入场费10元，后每分钟0.8元', 0);
 INSERT INTO `a_parking_billing` VALUES (4, 10, 0, '每分钟0.1元', 0);
 
 -- ----------------------------
@@ -49,24 +49,26 @@ CREATE TABLE `a_parking_record`  (
   `out_time` datetime NULL DEFAULT NULL,
   `fee` bigint NULL DEFAULT NULL,
   `billing_id` bigint NOT NULL,
-  PRIMARY KEY (`record_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`record_id`) USING BTREE,
+  INDEX `billing_id`(`billing_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of a_parking_record
 -- ----------------------------
 INSERT INTO `a_parking_record` VALUES (1, '粤A12345', '2024-11-22 00:00:00', NULL, 0, 1);
-INSERT INTO `a_parking_record` VALUES (2, '京B67890', '2024-11-22 00:00:00', '2024-11-22 00:00:00', 1800, 1);
-INSERT INTO `a_parking_record` VALUES (3, '沪C23456', '2024-11-22 00:00:00', '2024-11-22 00:00:00', 3000, 2);
+INSERT INTO `a_parking_record` VALUES (2, '京B67890', '2024-11-22 00:00:00', '2024-11-22 00:00:00', 1799, 1);
+INSERT INTO `a_parking_record` VALUES (3, '沪C23456', '2024-11-22 00:00:00', '2024-11-23 00:00:00', 30050, 2);
 INSERT INTO `a_parking_record` VALUES (9, '浙E34567', '2024-11-24 22:22:04', '2024-11-29 16:03:30', 341071, 2);
 INSERT INTO `a_parking_record` VALUES (12, '晋H90123', '2024-11-26 22:33:25', '2024-11-28 11:07:26', 65820, 1);
 INSERT INTO `a_parking_record` VALUES (13, '冀J56789', '2024-11-27 22:04:36', '2024-11-27 22:05:12', 18, 1);
 INSERT INTO `a_parking_record` VALUES (14, '苏F89012', '2024-11-27 22:04:58', NULL, 0, 2);
 INSERT INTO `a_parking_record` VALUES (15, '京B67890', '2024-11-28 11:05:36', NULL, 0, 2);
 INSERT INTO `a_parking_record` VALUES (16, '冀J56789', '2024-11-28 11:06:24', NULL, 0, 4);
-INSERT INTO `a_parking_record` VALUES (17, '晋H90123', '2024-11-28 15:03:47', NULL, 0, 4);
+INSERT INTO `a_parking_record` VALUES (17, '晋H90123', '2024-11-28 15:03:47', '2024-12-01 21:02:54', 46791, 4);
 INSERT INTO `a_parking_record` VALUES (18, '鲁G45678', '2024-11-29 16:02:42', NULL, 0, 4);
 INSERT INTO `a_parking_record` VALUES (19, '粤B98745', '2024-09-01 00:00:00', '2024-09-01 00:00:00', 1000, 3);
+INSERT INTO `a_parking_record` VALUES (20, '川D78901', '2024-12-01 20:46:33', NULL, 0, 3);
 
 -- ----------------------------
 -- Table structure for gen_table
@@ -558,7 +560,7 @@ CREATE TABLE `sys_job_log`  (
   `exception_info` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '异常信息',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`job_log_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_job_log
@@ -609,7 +611,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status`) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 141 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 152 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -655,6 +657,17 @@ INSERT INTO `sys_logininfor` VALUES (137, 'admin', '127.0.0.1', '内网IP', 'Chr
 INSERT INTO `sys_logininfor` VALUES (138, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-11-30 21:30:44');
 INSERT INTO `sys_logininfor` VALUES (139, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-11-30 22:25:51');
 INSERT INTO `sys_logininfor` VALUES (140, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-12-01 15:58:06');
+INSERT INTO `sys_logininfor` VALUES (141, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '1', '验证码错误', '2024-12-01 17:36:28');
+INSERT INTO `sys_logininfor` VALUES (142, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-12-01 17:36:31');
+INSERT INTO `sys_logininfor` VALUES (143, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '1', '验证码已失效', '2024-12-01 20:32:35');
+INSERT INTO `sys_logininfor` VALUES (144, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-12-01 20:32:38');
+INSERT INTO `sys_logininfor` VALUES (145, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-12-01 22:21:38');
+INSERT INTO `sys_logininfor` VALUES (146, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-12-02 20:18:52');
+INSERT INTO `sys_logininfor` VALUES (147, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2024-12-02 20:27:09');
+INSERT INTO `sys_logininfor` VALUES (148, 'parking_operator', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-12-02 20:27:23');
+INSERT INTO `sys_logininfor` VALUES (149, 'parking_operator', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '退出成功', '2024-12-02 20:27:55');
+INSERT INTO `sys_logininfor` VALUES (150, 'parking_admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-12-02 20:28:06');
+INSERT INTO `sys_logininfor` VALUES (151, 'admin', '127.0.0.1', '内网IP', 'Chrome 13', 'Windows 10', '0', '登录成功', '2024-12-04 19:04:51');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -804,7 +817,7 @@ CREATE TABLE `sys_notice`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`notice_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '通知公告表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '通知公告表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_notice
@@ -838,7 +851,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type`) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status`) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 164 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 173 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -907,6 +920,15 @@ INSERT INTO `sys_oper_log` VALUES (160, '停车计费', 1, 'com.ruoyi.parking.co
 INSERT INTO `sys_oper_log` VALUES (161, '停车计费', 1, 'com.ruoyi.parking.controller.AParkingBillingController.add()', 'POST', 1, 'admin', '研发部门', '/parking/billing', '127.0.0.1', '内网IP', '{\"billingId\":4,\"extraFee\":0,\"params\":{},\"perMinuteFee\":10,\"remark\":\"每分钟0.1元\",\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-11-27 22:34:23', 91);
 INSERT INTO `sys_oper_log` VALUES (162, '停车记录', 1, 'com.ruoyi.parking.controller.AParkingRecordController.add()', 'POST', 1, 'admin', '研发部门', '/parking/record', '127.0.0.1', '内网IP', '{\"billingId\":3,\"entryTime\":\"2024/09/01 00:00:00\",\"fee\":1000,\"licensePlateNumber\":\"粤B98745\",\"outTime\":\"2024/09/02 00:00:00\",\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-11-30 22:41:02', 16);
 INSERT INTO `sys_oper_log` VALUES (163, '停车记录', 2, 'com.ruoyi.parking.controller.AParkingRecordController.edit()', 'PUT', 1, 'admin', '研发部门', '/parking/record', '127.0.0.1', '内网IP', '{\"billingId\":3,\"entryTime\":\"2024/09/01 00:00:00\",\"fee\":1000,\"licensePlateNumber\":\"粤B98745\",\"outTime\":\"2024/09/01 00:00:00\",\"params\":{},\"recordId\":19}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-11-30 22:41:23', 8);
+INSERT INTO `sys_oper_log` VALUES (164, '停车记录', 5, 'com.ruoyi.parking.controller.AParkingRecordController.export()', 'POST', 1, 'admin', '研发部门', '/parking/record/export', '127.0.0.1', '内网IP', '{\"pageSize\":\"10\",\"pageNum\":\"1\"}', NULL, 0, NULL, '2024-12-01 17:36:37', 563);
+INSERT INTO `sys_oper_log` VALUES (165, '停车记录', 5, 'com.ruoyi.parking.controller.AParkingRecordController.export()', 'POST', 1, 'admin', '研发部门', '/parking/record/export', '127.0.0.1', '内网IP', '{\"pageSize\":\"10\",\"pageNum\":\"1\"}', NULL, 0, NULL, '2024-12-01 17:37:30', 448);
+INSERT INTO `sys_oper_log` VALUES (166, '角色管理', 1, 'com.ruoyi.web.controller.system.SysRoleController.add()', 'POST', 1, 'admin', '研发部门', '/system/role', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"deptCheckStrictly\":true,\"deptIds\":[],\"flag\":false,\"menuCheckStrictly\":true,\"menuIds\":[2000,2002,2003,2004,2005,2006,2007,2014],\"params\":{},\"roleId\":100,\"roleKey\":\"parking_operator\",\"roleName\":\"停车场_操作员\",\"roleSort\":100,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-12-02 20:24:04', 38);
+INSERT INTO `sys_oper_log` VALUES (167, '角色管理', 1, 'com.ruoyi.web.controller.system.SysRoleController.add()', 'POST', 1, 'admin', '研发部门', '/system/role', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"deptCheckStrictly\":true,\"deptIds\":[],\"flag\":false,\"menuCheckStrictly\":true,\"menuIds\":[2000,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2015,2014],\"params\":{},\"roleId\":101,\"roleKey\":\"parking_admin\",\"roleName\":\"停车场_管理员\",\"roleSort\":99,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-12-02 20:24:35', 45);
+INSERT INTO `sys_oper_log` VALUES (168, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"nickName\":\"停车场_操作员1号\",\"params\":{},\"postIds\":[],\"roleIds\":[100],\"sex\":\"2\",\"status\":\"0\",\"userId\":100,\"userName\":\"parking_operator\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-12-02 20:26:27', 80);
+INSERT INTO `sys_oper_log` VALUES (169, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"nickName\":\"停车场_管理员1号\",\"params\":{},\"postIds\":[],\"roleIds\":[101],\"status\":\"0\",\"userId\":101,\"userName\":\"parking_admin\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-12-02 20:27:05', 112);
+INSERT INTO `sys_oper_log` VALUES (170, '停车记录', 2, 'com.ruoyi.parking.controller.AParkingRecordController.edit()', 'PUT', 1, 'admin', '研发部门', '/parking/record', '127.0.0.1', '内网IP', '{\"billingId\":1,\"entryTime\":\"2024/11/22 00:00:00\",\"fee\":1799,\"licensePlateNumber\":\"京B67890\",\"outTime\":\"2024/11/22 00:00:00\",\"params\":{},\"recordId\":2}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-12-04 19:07:23', 35);
+INSERT INTO `sys_oper_log` VALUES (171, '停车记录', 2, 'com.ruoyi.parking.controller.AParkingRecordController.edit()', 'PUT', 1, 'admin', '研发部门', '/parking/record', '127.0.0.1', '内网IP', '{\"billingId\":2,\"entryTime\":\"2024/11/22 00:00:00\",\"fee\":30050,\"licensePlateNumber\":\"沪C23456\",\"outTime\":\"2024/11/23 00:00:00\",\"params\":{},\"recordId\":3}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-12-04 19:07:38', 33);
+INSERT INTO `sys_oper_log` VALUES (172, '停车计费', 2, 'com.ruoyi.parking.controller.AParkingBillingController.edit()', 'PUT', 1, 'admin', '研发部门', '/parking/billing', '127.0.0.1', '内网IP', '{\"billingId\":1,\"extraFee\":0,\"params\":{},\"perMinuteFee\":40,\"remark\":\"每分钟0.4元\",\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-12-04 19:09:08', 39);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -924,7 +946,7 @@ CREATE TABLE `sys_post`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`post_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '岗位信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '岗位信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_post
@@ -954,13 +976,15 @@ CREATE TABLE `sys_role`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', 1, '1', 1, 1, '0', '0', 'admin', '2024-11-12 16:47:22', '', NULL, '超级管理员');
 INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', 1, 1, '0', '0', 'admin', '2024-11-12 16:47:22', '', NULL, '普通角色');
+INSERT INTO `sys_role` VALUES (100, '停车场_操作员', 'parking_operator', 100, '1', 1, 1, '0', '0', 'admin', '2024-12-02 20:24:04', '', NULL, NULL);
+INSERT INTO `sys_role` VALUES (101, '停车场_管理员', 'parking_admin', 99, '1', 1, 1, '0', '0', 'admin', '2024-12-02 20:24:35', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role_dept
@@ -1077,6 +1101,29 @@ INSERT INTO `sys_role_menu` VALUES (2, 1057);
 INSERT INTO `sys_role_menu` VALUES (2, 1058);
 INSERT INTO `sys_role_menu` VALUES (2, 1059);
 INSERT INTO `sys_role_menu` VALUES (2, 1060);
+INSERT INTO `sys_role_menu` VALUES (100, 2000);
+INSERT INTO `sys_role_menu` VALUES (100, 2002);
+INSERT INTO `sys_role_menu` VALUES (100, 2003);
+INSERT INTO `sys_role_menu` VALUES (100, 2004);
+INSERT INTO `sys_role_menu` VALUES (100, 2005);
+INSERT INTO `sys_role_menu` VALUES (100, 2006);
+INSERT INTO `sys_role_menu` VALUES (100, 2007);
+INSERT INTO `sys_role_menu` VALUES (100, 2014);
+INSERT INTO `sys_role_menu` VALUES (101, 2000);
+INSERT INTO `sys_role_menu` VALUES (101, 2002);
+INSERT INTO `sys_role_menu` VALUES (101, 2003);
+INSERT INTO `sys_role_menu` VALUES (101, 2004);
+INSERT INTO `sys_role_menu` VALUES (101, 2005);
+INSERT INTO `sys_role_menu` VALUES (101, 2006);
+INSERT INTO `sys_role_menu` VALUES (101, 2007);
+INSERT INTO `sys_role_menu` VALUES (101, 2008);
+INSERT INTO `sys_role_menu` VALUES (101, 2009);
+INSERT INTO `sys_role_menu` VALUES (101, 2010);
+INSERT INTO `sys_role_menu` VALUES (101, 2011);
+INSERT INTO `sys_role_menu` VALUES (101, 2012);
+INSERT INTO `sys_role_menu` VALUES (101, 2013);
+INSERT INTO `sys_role_menu` VALUES (101, 2014);
+INSERT INTO `sys_role_menu` VALUES (101, 2015);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -1103,13 +1150,15 @@ CREATE TABLE `sys_user`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-12-01 15:58:07', 'admin', '2024-11-12 16:47:22', '', '2024-12-01 15:58:06', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-12-04 19:04:52', 'admin', '2024-11-12 16:47:22', '', '2024-12-04 19:04:51', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '2', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-11-12 16:47:22', 'admin', '2024-11-12 16:47:22', 'admin', '2024-11-12 20:35:57', '测试员');
+INSERT INTO `sys_user` VALUES (100, NULL, 'parking_operator', '停车场_操作员1号', '00', '', '', '2', '', '$2a$10$mOd4qcez7m4FGhN1MPytqO7PgmeIx2t423w2.BTjO8GIRq8aELw6q', '0', '0', '127.0.0.1', '2024-12-02 20:27:24', 'admin', '2024-12-02 20:26:27', '', '2024-12-02 20:27:23', NULL);
+INSERT INTO `sys_user` VALUES (101, NULL, 'parking_admin', '停车场_管理员1号', '00', '', '', '0', '', '$2a$10$d8wiGAVlmqU5AhoQqq9dmOSwxUDbg0lW4bdaSh2ragJFAynvSDn6W', '0', '0', '127.0.0.1', '2024-12-02 20:28:06', 'admin', '2024-12-02 20:27:05', '', '2024-12-02 20:28:06', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
@@ -1134,7 +1183,8 @@ DROP TABLE IF EXISTS `sys_user_role`;
 CREATE TABLE `sys_user_role`  (
   `user_id` bigint NOT NULL COMMENT '用户ID',
   `role_id` bigint NOT NULL COMMENT '角色ID',
-  PRIMARY KEY (`user_id`, `role_id`) USING BTREE
+  PRIMARY KEY (`user_id`, `role_id`) USING BTREE,
+  INDEX `role_id`(`role_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户和角色关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -1142,5 +1192,7 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2);
+INSERT INTO `sys_user_role` VALUES (100, 100);
+INSERT INTO `sys_user_role` VALUES (101, 101);
 
 SET FOREIGN_KEY_CHECKS = 1;
